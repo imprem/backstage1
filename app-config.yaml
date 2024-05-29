@@ -1,9 +1,14 @@
 app:
-  title: Scaffolded Backstage App
+  title: Backstage App
   baseUrl: http://localhost:3000
 
+  proxy:
+    endpoints:
+      '/puppetdb':
+       target: https://your.puppetdb.instance.com
+
 organization:
-  name: My Company
+  name: Mphasis
 
 backend:
   # Used for enabling authentication, secret is shared by all backend plugins
@@ -27,29 +32,52 @@ backend:
     credentials: true
   # This is for local development only, it is not recommended to use this in production
   # The production database configuration is stored in app-config.production.yaml
-  database:
-    client: better-sqlite3
-    connection: ':memory:'
+  
+  # database:
+  #   client: better-sqlite3
+  #   connection: ':memory:'
+  
   # workingDirectory: /tmp # Use this to configure a working directory for the scaffolder, defaults to the OS temp-dir
+  # database:
+  #   connection:
+  #       host: localhost
+  #       port: 5432
+  #       user: postgres
+  #       password: root
+
+  database:
+    client: pg
+    connection:
+      host: localhost
+      port: 5432
+      user: postgres
+      password: root
+      # database: my_backstage_db
+
 
 integrations:
   github:
     - host: github.com
-      # This is a Personal Access Token or PAT from GitHub. You can find out how to generate this token, and more information
-      # about setting up the GitHub integration here: https://backstage.io/docs/integrations/github/locations#configuration
-      token: ${GITHUB_TOKEN}
+      token: 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
     ### Example for how to add your GitHub Enterprise instance using the API:
     # - host: ghe.example.net
     #   apiBaseUrl: https://ghe.example.net/api/v3
     #   token: ${GHE_TOKEN}
 
-proxy:
-  ### Example for how to add a proxy endpoint for the frontend.
-  ### A typical reason to do this is to handle HTTPS and CORS for internal services.
+# proxy:
+  ## Example for how to add a proxy endpoint for the frontend.
+  ## A typical reason to do this is to handle HTTPS and CORS for internal services.
   # endpoints:
   #   '/test':
   #     target: 'https://example.com'
   #     changeOrigin: true
+
+proxy:
+ endpoints:
+ '/uselessfacts/api':
+ changeOrigin: true
+ target: 'https://uselessfacts.jsph.pl'
+ secure: false
 
 # Reference documentation http://backstage.io/docs/features/techdocs/configuration
 # Note: After experimenting with basic setup, use CI/CD to generate docs
@@ -58,15 +86,33 @@ proxy:
 techdocs:
   builder: 'local' # Alternatives - 'external'
   generator:
-    runIn: 'docker' # Alternatives - 'local'
+    runIn: 'local' # Alternatives - 'local'
   publisher:
     type: 'local' # Alternatives - 'googleGcs' or 'awsS3'. Read documentation for using alternatives.
 
+# techdocs:
+#   builder: 'local' 
+#   generator:
+#     runIn: 'docker'
+#   publisher:
+#     type: 'local'
+
 auth:
-  # see https://backstage.io/docs/auth/ to learn about auth providers
+  environment: development
   providers:
-    # See https://backstage.io/docs/auth/guest/provider
-    guest: {}
+    github:
+      development:
+        clientId: efdb922398b0ccdfd4d0
+        clientSecret: df304e4b1f954242c0b47b3bcf017eaa7a8de305
+        signIn:
+          resolvers:
+            - resolver: emailMatchingUserEntityProfileEmail
+            - resolver: emailLocalPartMatchingUserEntityName
+            - resolver: usernameMatchingUserEntityName
+  # see https://backstage.io/docs/auth/ to learn about auth providers
+  # providers:
+  #   # See https://backstage.io/docs/auth/guest/provider
+  #   guest: {}
 
 scaffolder:
   # see https://backstage.io/docs/features/software-templates/configuration for software template options
@@ -78,6 +124,38 @@ catalog:
   rules:
     - allow: [Component, System, API, Resource, Location]
   locations:
+
+    - type: file
+      target: ../catalog-model/examples/components/react-app1.yaml
+
+    - type: file
+      target: ../catalog-model/examples/components/weather-app.yaml
+
+    - type: file
+      target: ../catalog-model/examples/components/tokenBalance-app.yaml
+
+    - type: file
+      target: ../catalog-model/examples/components/productDetails-app.yaml
+
+    - type: file
+      target: ../catalog-model/examples/systems/sp-demo.yaml
+
+    - type: file
+      target: ../catalog-model/examples/systems/test-app.yaml
+
+    # Example component for TechDocs
+    - type: file
+      target: ../catalog-model/examples/documented-component/catalog-info.yaml
+
+    # - type: file
+    #   target: ../catalog-model/examples/all.yaml
+
+    # - type: file
+    #   target: ../catalog-model/examples/acme/team-a-group.yaml
+
+    # - type: file
+    #   target: ../catalog-model/examples/acme/org.yaml
+
     # Local example data, file locations are relative to the backend process, typically `packages/backend`
     - type: file
       target: ../../examples/entities.yaml
@@ -88,11 +166,30 @@ catalog:
       rules:
         - allow: [Template]
 
+    # - type: file
+    #   target: ../../exampless/template/template.yaml
+    #   rules:
+    #     - allow: [Template]
+    #   - type: file
+    #     target: template.yaml
+
+    # - type: url
+    #   target: https://github.com/backstage/software-templates/blob/main/scaffolder-templates/react-ssr-template/template.yaml
+    #   rules:
+    #     - allow: [Template]
+    # - type: file
+    #   target: ../../exampless/template/template.yaml
+
     # Local example organizational data
     - type: file
       target: ../../examples/org.yaml
       rules:
         - allow: [User, Group]
+    
+    - type: file
+      target: ../../my-custom-template/template.yaml
+      rules:
+        - allow: [Template]
 
     ## Uncomment these lines to add more example data
     # - type: url

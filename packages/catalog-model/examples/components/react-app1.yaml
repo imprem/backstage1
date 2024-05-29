@@ -1,0 +1,18 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: react-app1
+  annotations:
+    backstage.io/source-template: template:default/react-app1
+    backstage.io/linguist: 'https://github.com/imprem/react-app1/tree/main'
+    backstage.io/techdocs-ref: dir:.
+    backstage.io/techdocs-builder: external
+spec:
+  type: website
+  lifecycle: unknown
+  system: sp-demo
+  owner: guests
+  consumesApis: 
+    - 'component:weather-app' 
+    - 'component:tokenBalance-app'
+    - 'component:poductDetails-app'

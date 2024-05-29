@@ -57,6 +57,7 @@ import {
 
 import { TechDocsAddons } from '@backstage/plugin-techdocs-react';
 import { ReportIssue } from '@backstage/plugin-techdocs-module-addons-contrib';
+import { EntityOverviewCard } from '@internal/backstage-plugin-my-pluin/src/components/EntityOverviewCard';
 
 const techdocsContent = (
   <EntityTechdocsContent>
@@ -76,7 +77,7 @@ const cicdContent = (
 
     <EntitySwitch.Case>
       <EmptyState
-        title="No CI/CD available for this entity"
+        title="Hye prem i miss you"
         missing="info"
         description="You need to add an annotation to your component if you want to enable CI/CD for it. You can read more about annotations in Backstage by clicking the button below."
         action={
@@ -136,6 +137,9 @@ const overviewContent = (
     </Grid>
     <Grid item md={8} xs={12}>
       <EntityHasSubcomponentsCard variant="gridItem" />
+    </Grid>
+    <Grid item md={4} xs={12}>
+        <EntityOverviewCard />
     </Grid>
   </Grid>
 );

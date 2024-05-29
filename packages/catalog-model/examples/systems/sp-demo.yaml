@@ -1,0 +1,10 @@
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: sp-demo
+  description: Everything related to artists
+  tags:
+    - portal
+spec:
+  type: other
+  owner: guests

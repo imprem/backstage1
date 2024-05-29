@@ -7,6 +7,8 @@
  */
 
 import { createBackend } from '@backstage/backend-defaults';
+// import { createBackend, useHotMemoize, createEnv } from '@backstage/backend-common';
+// import techdocs from './plugins/techdocs';
 
 const backend = createBackend();
 
@@ -37,5 +39,10 @@ backend.add(
 backend.add(import('@backstage/plugin-search-backend/alpha'));
 backend.add(import('@backstage/plugin-search-backend-module-catalog/alpha'));
 backend.add(import('@backstage/plugin-search-backend-module-techdocs/alpha'));
+//Github
+backend.add(import('@backstage/plugin-auth-backend-module-oauth2-provider'));
+backend.add(import('@backstage/plugin-auth-backend-module-github-provider'));
+backend.add(import('@backstage/plugin-scaffolder-backend-module-github'));
+// backend.add(import('@backstage/plugin-search-backend-module-catalog/alpha'));
 
 backend.start();

@@ -1,0 +1,8 @@
+site_name: react-app1
+# site_description: ${{values.description}}
+
+nav:
+  - Home: index.md
+
+plugins:
+  - techdocs-core
